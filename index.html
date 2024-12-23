@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>樂齡寵物樂園</title>
+    <style>
+        /* 原有的樣式保持不變 */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f8ff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        /* 新的寵物樣式 */
+        .pet {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .pet:hover {
+            transform: scale(1.1);
+        }
+
+        /* 狗狗的身體部位 */
+        .dog-head {
+            width: 120px;
+            height: 120px;
+            background-color: #f4a460;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 40px;
+        }
+
+        .dog-ear-left, .dog-ear-right {
+            width: 45px;
+            height: 65px;
+            background-color: #8b4513;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .dog-ear-left {
+            top: -20px;
+            left: 0;
+            transform: rotate(-30deg);
+        }
+
+        .dog-ear-right {
+            top: -20px;
+            right: 0;
+            transform: rotate(30deg);
+        }
+
+        .dog-eye-left, .dog-eye-right {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 40px;
+        }
+
+        .dog-eye-left {
+            left: 30px;
+        }
+
+        .dog-eye-right {
+            right: 30px;
+        }
+
+        .dog-nose {
+            width: 25px;
+            height: 15px;
+            background-color: #000;
+            border-radius: 10px;
+            position: absolute;
+            top: 60px;
+            left: 47px;
+        }
+
+        .dog-mouth {
+            width: 40px;
+            height: 20px;
+            border-radius: 0 0 20px 20px;
+            border-bottom: 3px solid #000;
+            position: absolute;
+            top: 75px;
+            left: 40px;
+        }
+
+        .dog-body {
+            width: 140px;
+            height: 80px;
+            background-color: #f4a460;
+            border-radius: 40px;
+            position: absolute;
+            top: 130px;
+            left: 30px;
+        }
+
+        .dog-tail {
+            width: 50px;
+            height: 15px;
+            background-color: #8b4513;
+            position: absolute;
+            top: 150px;
+            left: 160px;
+            border-radius: 10px;
+            transform-origin: left center;
+            animation: wagTail 1s infinite;
+        }
+
+        @keyframes wagTail {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        .dog-leg {
+            width: 15px;
+            height: 35px;
+            background-color: #8b4513;
+            position: absolute;
+            border-radius: 7px;
+        }
+
+        .dog-leg1 { left: 40px; top: 190px; }
+        .dog-leg2 { left: 70px; top: 190px; }
+        .dog-leg3 { left: 115px; top: 190px; }
+        .dog-leg4 { left: 145px; top: 190px; }
+
+        /* 表情狀態 */
+        .happy .dog-mouth {
+            border-radius: 20px 20px 0 0;
+            border-bottom: none;
+            border-top: 3px solid #000;
+            top: 70px;
+        }
+
+        .sleeping .dog-eye-left,
+        .sleeping .dog-eye-right {
+            height: 3px;
+            background-color: #000;
+            top: 50px;
+            border-radius: 0;
+        }
+
+        /* 其他原有樣式保持不變 */
+        .button {
+            font-size: 24px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #87ceeb;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .status {
+            font-size: 24px;
+            margin: 20px;
+        }
+        
+        .reminder {
+            font-size: 24px;
+            color: #ff6347;
+            margin: 20px;
+        }
+
+        /* 表情動畫 */
+        @keyframes blink {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+            100% { transform: scaleY(1); }
+        }
+
+        .dog-eye-left, .dog-eye-right {
+            animation: blink 4s infinite;
+        }
+
+        /* 互動效果 */
+        .pet:active .dog-head {
+            transform: scale(0.95);
+        }
+
+        .playing .dog-body {
+            animation: bounce 0.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="font-size: 36px;">樂齡寵物樂園</h1>
+        
+        <div class="pet" id="pet">
+            <div class="dog-body"></div>
+            <div class="dog-head">
+                <div class="dog-ear-left"></div>
+                <div class="dog-ear-right"></div>
+                <div class="dog-eye-left"></div>
+                <div class="dog-eye-right"></div>
+                <div class="dog-nose"></div>
+                <div class="dog-mouth"></div>
+            </div>
+            <div class="dog-tail"></div>
+            <div class="dog-leg dog-leg1"></div>
+            <div class="dog-leg dog-leg2"></div>
+            <div class="dog-leg dog-leg3"></div>
+            <div class="dog-leg dog-leg4"></div>
+        </div>
+
+        <div class="status" id="status">
+            心情: 開心 | 飢餓度: 50% | 活力: 80%
+        </div>
+
+        <div>
+            <button class="button" onclick="feed()">餵食</button>
+            <button class="button" onclick="play()">玩耍</button>
+            <button class="button" onclick="bath()">洗澡</button>
+            <button class="button" onclick="sleep()">睡覺</button>
+        </div>
+
+        <div class="reminder" id="reminder"></div>
+    </div>
+
+    <script>
+        let happiness = 80;
+        let hunger = 50;
+        let energy = 80;
+        let lastMealTime = new Date();
+        let isSleeping = false;
+
+        function updateStatus() {
+            document.getElementById('status').innerHTML = 
+                `心情: ${happiness}% | 飢餓度: ${hunger}% | 活力: ${energy}%`;
+        }
+
+        function feed() {
+            if (hunger < 100) {
+                hunger -= 20;
+                happiness += 10;
+                lastMealTime = new Date();
+                if (hunger < 0) hunger = 0;
+                if (happiness > 100) happiness = 100;
+                updateStatus();
+                
+                // 吃東西的動畫效果
+                const pet = document.getElementById('pet');
+                pet.classList.add('happy');
+                setTimeout(() => {
+                    pet.classList.remove('happy');
+                }, 1000);
+            }
+        }
+
+        function play() {
+            if (energy > 0) {
+                happiness += 20;
+                energy -= 20;
+                if (happiness > 100) happiness = 100;
+                if (energy < 0) energy = 0;
+                updateStatus();
+
+                // 玩耍的動畫效果
+                const pet = document.getElementById('pet');
+                pet.classList.add('playing');
+                setTimeout(() => {
+                    pet.classList.remove('playing');
+                }, 2000);
+            }
+        }
+
+        function sleep() {
+            isSleeping = !isSleeping;
+            const pet = document.getElementById('pet');
+            if (isSleeping) {
+                pet.classList.add('sleeping');
+                energy += 30;
+                if (energy > 100) energy = 100;
+            } else {
+                pet.classList.remove('sleeping');
+            }
+            updateStatus();
+        }
+
+        function bath() {
+            happiness += 15;
+            if (happiness > 100) happiness = 100;
+            updateStatus();
+
+            // 洗澡的動畫效果
+            const pet = document.getElementById('pet');
+            pet.style.transform = 'rotate(5deg)';
+            setTimeout(() => {
+                pet.style.transform = 'rotate(-5deg)';
+            }, 200);
+            setTimeout(() => {
+                pet.style.transform = 'rotate(0deg)';
+            }, 400);
+        }
+
+        // 定時檢查和提醒
+        setInterval(() => {
+            if (!isSleeping) {
+                hunger += 5;
+                energy -= 2;
+                if (hunger > 100) hunger = 100;
+                if (energy < 0) energy = 0;
+            }
+
+            const now = new Date();
+            const timeSinceLastMeal = (now - lastMealTime) / 1000 / 60;
+
+            if (timeSinceLastMeal >= 1) {
+                document.getElementById('reminder').innerHTML = 
+                    "該吃飯啦！別讓小狗狗餓著喔！";
+            }
+
+            if (energy < 30) {
+                document.getElementById('reminder').innerHTML += 
+                    "<br>小狗狗累了，該讓它休息了！";
+            }
+
+            updateStatus();
+        }, 30000);
+
+        // 點擊寵物的互動
+        document.getElementById('pet').addEventListener('click', function() {
+            if (!isSleeping) {
+                happiness += 5;
+                if (happiness > 100) happiness = 100;
+                updateStatus();
+                
+                // 開心的動畫效果
+                this.classList.add('happy');
+                setTimeout(() => {
+                    this.classList.remove('happy');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
