@@ -1,12 +1,272 @@
 <!DOCTYPE html>
 <html lang="zh">
-<!-- [前面的 HEAD 和 STYLE 部分保持不變] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>樂齡寵物樂園</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f8ff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
 
+        /* 寵物樣式 */
+        .pet {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* 狗狗的身體部位 */
+        .dog-head {
+            width: 120px;
+            height: 120px;
+            background-color: #f4a460;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            z-index: 2;
+        }
+
+        .dog-ear-left, .dog-ear-right {
+            width: 45px;
+            height: 65px;
+            background-color: #8b4513;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .dog-ear-left {
+            top: -20px;
+            left: 0;
+            transform: rotate(-30deg);
+        }
+
+        .dog-ear-right {
+            top: -20px;
+            right: 0;
+            transform: rotate(30deg);
+        }
+
+        .dog-eye-left, .dog-eye-right {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 40px;
+        }
+
+        .dog-eye-left {
+            left: 30px;
+        }
+
+        .dog-eye-right {
+            right: 30px;
+        }
+
+        .dog-nose {
+            width: 25px;
+            height: 15px;
+            background-color: #000;
+            border-radius: 10px;
+            position: absolute;
+            top: 60px;
+            left: 47px;
+        }
+
+        .dog-mouth {
+            width: 40px;
+            height: 20px;
+            border-radius: 0 0 20px 20px;
+            border-bottom: 3px solid #000;
+            position: absolute;
+            top: 75px;
+            left: 40px;
+        }
+
+        .dog-body {
+            width: 140px;
+            height: 80px;
+            background-color: #f4a460;
+            border-radius: 40px;
+            position: absolute;
+            top: 130px;
+            left: 30px;
+            z-index: 1;
+        }
+
+        .dog-tail {
+            width: 50px;
+            height: 15px;
+            background-color: #8b4513;
+            position: absolute;
+            top: 150px;
+            left: 160px;
+            border-radius: 10px;
+            transform-origin: left center;
+            animation: wagTail 1s infinite;
+            z-index: 1;
+        }
+
+        .dog-leg {
+            width: 15px;
+            height: 35px;
+            background-color: #8b4513;
+            position: absolute;
+            border-radius: 7px;
+        }
+
+        .dog-leg1 { left: 40px; top: 190px; }
+        .dog-leg2 { left: 70px; top: 190px; }
+        .dog-leg3 { left: 115px; top: 190px; }
+        .dog-leg4 { left: 145px; top: 190px; }
+
+        /* 按鈕樣式 */
+        .button {
+            font-size: 24px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #87ceeb;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #5f9ea0;
+        }
+
+        /* 狀態和提醒樣式 */
+        .status {
+            font-size: 24px;
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .reminder {
+            font-size: 24px;
+            color: #ff6347;
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 動畫效果 */
+        @keyframes wagTail {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        @keyframes blink {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+            100% { transform: scaleY(1); }
+        }
+
+        .dog-eye-left, .dog-eye-right {
+            animation: blink 4s infinite;
+        }
+
+        /* 控制面板樣式 */
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        /* 語音控制面板樣式 */
+        .voice-controls {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 互動狀態樣式 */
+        .happy .dog-mouth {
+            border-radius: 20px 20px 0 0;
+            border-bottom: none;
+            border-top: 3px solid #000;
+            top: 70px;
+        }
+
+        .sleeping .dog-eye-left,
+        .sleeping .dog-eye-right {
+            height: 3px;
+            background-color: #000;
+            top: 50px;
+            border-radius: 0;
+        }
+
+        .playing .dog-body {
+            animation: bounce 0.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
 <body>
     <div class="container">
-        <!-- [寵物相關的 HTML 保持不變] -->
-        
-        <!-- 添加語音控制按鈕 -->
+        <h1 style="font-size: 36px;">樂齡寵物樂園</h1>
+
+        <!-- 寵物顯示區 -->
+        <div class="pet" id="pet">
+            <div class="dog-body"></div>
+            <div class="dog-head">
+                <div class="dog-ear-left"></div>
+                <div class="dog-ear-right"></div>
+                <div class="dog-eye-left"></div>
+                <div class="dog-eye-right"></div>
+                <div class="dog-nose"></div>
+                <div class="dog-mouth"></div>
+            </div>
+            <div class="dog-tail"></div>
+            <div class="dog-leg dog-leg1"></div>
+            <div class="dog-leg dog-leg2"></div>
+            <div class="dog-leg dog-leg3"></div>
+            <div class="dog-leg dog-leg4"></div>
+        </div>
+
+        <!-- 狀態顯示 -->
+        <div class="status" id="status">
+            心情: 開心 | 飢餓度: 50% | 活力: 80%
+        </div>
+
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <button class="button" onclick="feed()">餵食</button>
+            <button class="button" onclick="play()">玩耍</button>
+            <button class="button" onclick="bath()">洗澡</button>
+            <button class="button" onclick="sleep()">睡覺</button>
+        </div>
+
+        <!-- 語音控制 -->
         <div class="voice-controls">
             <button class="button" onclick="toggleVoice()" id="voiceButton">
                 語音提示：開啟
@@ -15,19 +275,28 @@
                 調整音量
             </button>
         </div>
+
+        <!-- 提醒顯示 -->
+        <div class="reminder" id="reminder"></div>
     </div>
 
     <script>
+        // 基本狀態
+        let happiness = 80;
+        let hunger = 50;
+        let energy = 80;
+        let lastMealTime = new Date();
+        let isSleeping = false;
+
         // 語音設置
         let voiceEnabled = true;
-        let volume = 1.0; // 音量: 0.0 到 1.0
+        let volume = 1.0;
         const speechSynth = window.speechSynthesis;
         let voices = [];
 
         // 初始化語音
         function initVoices() {
             voices = speechSynth.getVoices();
-            // 找尋中文語音
             const chineseVoice = voices.find(voice => 
                 voice.lang.includes('zh') || voice.lang.includes('cmn'));
             if (chineseVoice) {
@@ -35,34 +304,28 @@
             }
         }
 
-        // 某些瀏覽器需要等待語音列表載入
         speechSynth.onvoiceschanged = initVoices;
         initVoices();
 
-        // 語音播報功能
+        // 語音功能
         function speak(text) {
             if (!voiceEnabled) return;
             
-            // 停止當前的語音
             speechSynth.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
+            utterance.volume = volume;
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
             
-            // 設置語音參數
-            utterance.volume = volume;  // 音量
-            utterance.rate = 0.9;      // 語速稍慢
-            utterance.pitch = 1.0;     // 音調
-            
-            // 使用中文語音
             if (voices.length > 0) {
                 utterance.voice = voices[0];
             }
-            utterance.lang = 'zh-TW';  // 設置為中文
+            utterance.lang = 'zh-TW';
 
             speechSynth.speak(utterance);
         }
 
-        // 切換語音開關
         function toggleVoice() {
             voiceEnabled = !voiceEnabled;
             const button = document.getElementById('voiceButton');
@@ -73,7 +336,6 @@
             }
         }
 
-        // 調整音量
         function adjustVolume() {
             const newVolume = prompt('請輸入音量大小（0-100）：', volume * 100);
             if (newVolume !== null) {
@@ -82,43 +344,43 @@
             }
         }
 
-        // 修改原有的互動功能，加入語音提示
+        // 寵物互動功能
         function feed() {
-            if (hunger < 100) {
+            if (!isSleeping && hunger < 100) {
                 hunger -= 20;
                 happiness += 10;
                 lastMealTime = new Date();
                 if (hunger < 0) hunger = 0;
                 if (happiness > 100) happiness = 100;
-                updateStatus();
                 
                 const pet = document.getElementById('pet');
                 pet.classList.add('happy');
-                setTimeout(() => {
-                    pet.classList.remove('happy');
-                }, 1000);
-
+                setTimeout(() => pet.classList.remove('happy'), 1000);
+                
+                updateStatus();
                 speak('好棒！小狗吃得很開心呢！');
+            } else if (isSleeping) {
+                speak('小狗正在睡覺，不要打擾它哦');
             } else {
                 speak('小狗現在不餓喔！');
             }
         }
 
         function play() {
-            if (energy > 0) {
+            if (!isSleeping && energy > 0) {
                 happiness += 20;
                 energy -= 20;
                 if (happiness > 100) happiness = 100;
                 if (energy < 0) energy = 0;
-                updateStatus();
-
+                
                 const pet = document.getElementById('pet');
                 pet.classList.add('playing');
-                setTimeout(() => {
-                    pet.classList.remove('playing');
-                }, 2000);
-
+                setTimeout(() => pet.classList.remove('playing'), 2000);
+                
+                updateStatus();
                 speak('小狗玩得很開心！繼續保持運動喔！');
+            } else if (isSleeping) {
+                speak('小狗正在睡覺，不要打擾它哦');
             } else {
                 speak('小狗累了，需要休息一下');
             }
@@ -127,6 +389,7 @@
         function sleep() {
             isSleeping = !isSleeping;
             const pet = document.getElementById('pet');
+            
             if (isSleeping) {
                 pet.classList.add('sleeping');
                 energy += 30;
@@ -136,27 +399,37 @@
                 pet.classList.remove('sleeping');
                 speak('小狗醒來了！精神飽滿！');
             }
+            
             updateStatus();
         }
 
         function bath() {
-            happiness += 15;
-            if (happiness > 100) happiness = 100;
-            updateStatus();
-
-            const pet = document.getElementById('pet');
-            pet.style.transform = 'rotate(5deg)';
-            setTimeout(() => {
-                pet.style.transform = 'rotate(-5deg)';
-            }, 200);
-            setTimeout(() => {
-                pet.style.transform = 'rotate(0deg)';
-            }, 400);
-
-            speak('洗香香！保持清潔很重要喔！');
+            if (!isSleeping) {
+                happiness += 15;
+                if (happiness > 100) happiness = 100;
+                
+                const pet = document.getElementById('pet');
+                pet.style.transform = 'rotate(5deg)';
+                setTimeout(() => {
+                    pet.style.transform = 'rotate(-5deg)';
+                    setTimeout(() => {
+                        pet.style.transform = 'rotate(0deg)';
+                    }, 200);
+                }, 200);
+                
+                updateStatus();
+                speak('洗香香！保持清潔很重要喔！');
+            } else {
+                speak('小狗正在睡覺，等它醒來再幫它洗澡吧');
+            }
         }
 
-        // 修改定時檢查，加入語音提醒
+        function updateStatus() {
+            document.getElementById('status').innerHTML = 
+                `心情: ${happiness}% | 飢餓度: ${hunger}% | 活力: ${energy}%`;
+        }
+
+        // 定時檢查系統
         setInterval(() => {
             if (!isSleeping) {
                 hunger += 5;
@@ -167,58 +440,56 @@
 
             const now = new Date();
             const timeSinceLastMeal = (now - lastMealTime) / 1000 / 60;
-
-            // 餵食提醒
-            if (timeSinceLastMeal >= 1) {
-                const reminderText = "該吃飯啦！別讓小狗狗餓著喔！";
-                document.getElementById('reminder').innerHTML = reminderText;
-                speak(reminderText);
-            }
-
-            // 休息提醒
-            if (energy < 30) {
-                const energyText = "小狗狗累了，該讓它休息了！";
-                document.getElementById('reminder').innerHTML += "<br>" + energyText;
-                speak(energyText);
-            }
-
-            // 時間提醒
             const hour = now.getHours();
             const minute = now.getMinutes();
-            
-            // 定時提醒吃藥
-            if (hour === 8 && minute === 0) {
-                speak('早上八點了，該吃早餐和早上的藥囉！');
-            }
-            if (hour === 12 && minute === 0) {
-                speak('中午十二點了，該吃午餐和中午的藥囉！');
-            }
-            if (hour === 18 && minute === 0) {
-                speak('晚上六點了，該吃晚餐和晚上的藥囉！');
+
+            let reminderText = '';
+
+            if (timeSinceLastMeal >= 1) {
+                reminderText += "該吃飯啦！別讓小狗狗餓著喔！\n";
+                speak("該吃飯啦！別讓小狗狗餓著喔！");
             }
 
+            if (energy < 30) {
+                reminderText += "小狗狗累了，該讓它休息了！\n";
+                speak("小狗狗累了，該讓它休息了！");
+            }
+
+            // 定時提醒
+            if (minute === 0) {
+                if (hour === 8) {
+                    speak('早上八點了，該吃早餐和早上的藥囉！');
+                    reminderText += "早上八點了，該吃早餐和早上的藥囉！\n";
+                } else if (hour === 12) {
+                    speak('中午十二點了，該吃午餐和中午的藥囉！');
+                    reminderText += "中午十二點了，該吃午餐和中午的藥囉！\n";
+                } else if (hour === 18) {
+                    speak('晚上六點了，該吃晚餐和晚上的藥囉！');
+                    reminderText += "晚上六點了，該吃晚餐和晚上的藥囉！\n";
+                }
+            }
+
+            document.getElementById('reminder').innerHTML = reminderText.replace(/\n/g, '<br>');
             updateStatus();
         }, 30000);
 
-        // 修改點擊寵物的互動
+        // 寵物互動事件
         document.getElementById('pet').addEventListener('click', function() {
             if (!isSleeping) {
                 happiness += 5;
                 if (happiness > 100) happiness = 100;
-                updateStatus();
                 
                 this.classList.add('happy');
-                setTimeout(() => {
-                    this.classList.remove('happy');
-                }, 500);
-
+                setTimeout(() => this.classList.remove('happy'), 500);
+                
+                updateStatus();
                 speak('摸摸小狗，好舒服喔！');
             } else {
                 speak('噓，小狗正在睡覺呢');
             }
         });
 
-        // 開場歡迎語
+        // 頁面載入歡迎語
         window.onload = function() {
             setTimeout(() => {
                 speak('歡迎來到樂齡寵物樂園！我是您的小狗狗，讓我們一起快樂生活吧！');
